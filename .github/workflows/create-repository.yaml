@@ -46,21 +46,53 @@ on:
           Overrides the value in repo-config if set.
         required: false
         default: 'public'
-        type: choice
-        options:
-          - private
-          - internal
-          - public
+        type: string
+
+      job-summary:
+        description: Write a job summary to the GitHub Actions step summary.
+        required: false
+        default: true
+        type: boolean
 
 jobs:
-  create-repo:
-    uses: stairwaytowonderland/repository-create/.github/workflows/create-repository.yaml@main
-    with:
-      name: my-new-repo # required
-      # org: my-org # optional — defaults to caller's owner
-      repo-config: config/config.json # optional
-      # template-owner: my-org # optional
-      # template-repo: my-template # optional
-      # include-all-branches: false # optional
-    secrets: inherit
-    # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  create:
+    name: Create ${{ inputs.org || github.repository_owner }}/${{ inputs.name }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Create repository
+        id: create
+        uses: stairwaytowonderland/repository-create@main
+        with:
+          # ── Auth ────────────────────────────────────────────────────────────
+          # Replace with a GitHub App installation token when App auth is ready.
+          # GITHUB_TOKEN does not have admin:org scope — use a PAT stored as a
+          # repository secret with repo + admin:org scopes.
+          github-token: ${{ secrets.GH_PAT_CREATE_REPO }}
+
+          # ── Required ────────────────────────────────────────────────────────
+          org: ${{ inputs.org || github.repository_owner || github.repository_owner }}
+          name: ${{ inputs.name }}
+
+          # ── Optional ────────────────────────────────────────────────────────
+          repo-config: ${{ inputs.repo-config }}
+          template-owner: ${{ inputs.template-repo != '' && (inputs.template-owner || github.repository_owner) || '' }}
+          template-repo: ${{ inputs.template-repo }}
+          include-all-branches: ${{ inputs.include-all-branches }}
+          visibility: ${{ inputs.visibility }}
+          job-summary: ${{ inputs.job-summary }}
+
+      - name: Summary
+        if: ${{ inputs.job-summary != true }}
+        run: |
+          echo "## Repository Created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.create.outputs.repo-url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Name:** \`${{ steps.create.outputs.repo-name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
