@@ -1,4 +1,4 @@
-# Repository Template
+# create-repository
 
 A minimal starting point for a basic repository.
 
