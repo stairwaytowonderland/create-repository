@@ -75,11 +75,12 @@
 
 	/*
 		YAML settings
+		Leave commented to use prettier for YAML formatting instead of redhat.vscode-yaml -- recommended to avoid conflicts between formatters
 	*/
-	"[yaml]": {
-		"editor.defaultFormatter": "redhat.vscode-yaml",
-		"editor.formatOnSave": true
-	},
+	// "[yaml]": {
+	// 	"editor.defaultFormatter": "redhat.vscode-yaml",
+	// 	"editor.formatOnSave": true
+	// },
 
 	/*
 		Markdown settings

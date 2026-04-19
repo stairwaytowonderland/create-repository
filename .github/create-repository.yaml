@@ -1,0 +1,66 @@
+name: Create Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Repository name
+        required: true
+        type: string
+
+      org:
+        description: Target organization (leave blank to create under the org / user account)
+        required: false
+        type: string
+
+      repo-config:
+        description: >
+          Path to a JSON config override file, relative to the repo root.
+          Leave blank to use built-in defaults.
+        required: false
+        default: config/config.json
+        type: string
+
+      template-owner:
+        description: Template repository owner (leave blank to skip template)
+        required: false
+        default: ''
+        type: string
+
+      template-repo:
+        description: Template repository name (leave blank to skip template)
+        required: false
+        default: ''
+        type: string
+
+      include-all-branches:
+        description: Copy all template branches (default — main branch only)
+        required: false
+        default: false
+        type: boolean
+
+      visibility:
+        description: >
+          Repository visibility. One of: private, internal, public.
+          'internal' requires GitHub Enterprise Cloud (GHEC).
+          Overrides the value in repo-config if set.
+        required: false
+        default: 'public'
+        type: choice
+        options:
+          - private
+          - internal
+          - public
+
+jobs:
+  create-repo:
+    uses: stairwaytowonderland/repository-create/.github/workflows/create-repository.yaml@main
+    with:
+      name: my-new-repo # required
+      # org: my-org # optional — defaults to caller's owner
+      repo-config: config/config.json # optional
+      # template-owner: my-org # optional
+      # template-repo: my-template # optional
+      # include-all-branches: false # optional
+    secrets: inherit
+    # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
