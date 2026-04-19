@@ -5,21 +5,17 @@ A minimal starting point for a basic repository.
 ## Project structure
 
 > [!NOTE]
-> `tree -a .`
+> `tree -a -I '.vscode|.git|.gitignore|.prettier*|.editorconfig|.markdown*' .`
 
 ```none
 .
-├── .editorconfig
 ├── .github
-│   └── PULL_REQUEST_TEMPLATE.md
-├── .gitignore
-├── .markdownlint.json
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows
+│       └── create-repository.yaml
 ├── .pre-commit-config.yaml
-├── .prettierignore
-├── .prettierrc
-├── .vscode
-│   ├── extensions.json
-│   └── settings.json
+├── config
+│   └── config.json
 ├── CONTRIBUTING.md
 ├── LICENSE
 └── README.md
