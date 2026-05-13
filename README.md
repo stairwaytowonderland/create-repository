@@ -5,7 +5,7 @@ A minimal starting point for a basic repository.
 ## Project structure
 
 > [!NOTE]
-> `tree -a -I '.vscode|.git|.gitignore|.prettier*|.editorconfig|.markdown*' .`
+> `tree -a -F -L 2 -I '.git' --gitignore --dirsfirst .`
 
 ```none
 ./
