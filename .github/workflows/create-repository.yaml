@@ -41,14 +41,15 @@ on:
 
       visibility:
         description: >
-          Repository visibility. One of: private, internal, public (default).
+          Repository visibility. One of: private, internal, public, or unset (default).
           'internal' requires GitHub Enterprise Cloud (GHEC);
           'private' requires GitHub Pro, Team, or Enterprise Cloud (GHEC).
           Overrides the value in repo-config if set.
         required: false
-        default: 'public'
+        default: ''
         type: choice
         options:
+          - ''
           - private
           - internal
           - public
