@@ -41,12 +41,17 @@ on:
 
       visibility:
         description: >
-          Repository visibility. One of: private, internal, public.
-          'internal' requires GitHub Enterprise Cloud (GHEC).
+          Repository visibility. One of: private, internal, public (default).
+          'internal' requires GitHub Enterprise Cloud (GHEC);
+          'private' requires GitHub Pro, Team, or Enterprise Cloud (GHEC).
           Overrides the value in repo-config if set.
         required: false
         default: 'public'
-        type: string
+        type: choice
+        options:
+          - private
+          - internal
+          - public
 
       job-summary:
         description: Write a job summary to the GitHub Actions step summary.
